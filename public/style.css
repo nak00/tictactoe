@@ -8,6 +8,7 @@
     --font-color: #dcdcdc;
     --x-color: #3498db;
     --o-color: #e74c3c;
+    --win-color: #2ecc71; /* **NEW:** Color for winning cells */
 }
 
 body {
@@ -41,6 +42,21 @@ h1 {
 #game-info {
     margin-bottom: 1.5rem;
     font-size: 1.1rem;
+    min-height: 2em; /* Prevent layout shift */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* **NEW:** Styles for the status message, especially on win/draw */
+#status {
+    transition: transform 0.3s ease-in-out, color 0.3s ease-in-out;
+}
+
+#status.win-message {
+    color: var(--win-color);
+    font-weight: 600;
+    transform: scale(1.25);
 }
 
 #game-board {
@@ -53,9 +69,8 @@ h1 {
     transition: opacity 0.5s ease;
 }
 
-/* Style for when the game is over */
 #game-board.game-over {
-    opacity: 0.6;
+    opacity: 0.7;
     cursor: not-allowed;
 }
 
@@ -75,13 +90,26 @@ h1 {
     background-color: #2a4a87;
 }
 
-/* Styles for X and O */
 .cell.X {
     color: var(--x-color);
 }
 
 .cell.O {
     color: var(--o-color);
+}
+
+/* **NEW:** Style for the winning cells */
+.cell.winning-cell {
+    background-color: var(--win-color);
+    color: var(--primary-color);
+    animation: pulse 0.6s ease-in-out 3;
+}
+
+/* **NEW:** Animation for winning cells */
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+    100% { transform: scale(1); }
 }
 
 button {

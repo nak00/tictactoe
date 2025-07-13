@@ -21,21 +21,30 @@ ws.onmessage = (event) => {
             playerIdDisplay.textContent = `You are Player ${myPlayerId}`;
             break;
         case 'game-start':
-            boardDisplay.classList.remove('game-over'); // **NEW:** Remove game-over state
-            // Fall-through to update
-        case 'update':
+            boardDisplay.classList.remove('game-over');
+            statusDisplay.classList.remove('win-message'); // **NEW:** Remove special styling
             statusDisplay.textContent = `Player ${data.turn}'s Turn`;
             renderBoard(data.board);
             resetButton.style.display = 'none';
             break;
+        case 'update':
+            statusDisplay.textContent = `Player ${data.turn}'s Turn`;
+            renderBoard(data.board);
+            break;
         case 'win':
             statusDisplay.textContent = `Player ${data.winner} Wins!`;
-            boardDisplay.classList.add('game-over'); // **NEW:** Add game-over state
+            statusDisplay.classList.add('win-message'); // **NEW:** Add special styling for the win text
+            boardDisplay.classList.add('game-over');
             resetButton.style.display = 'block';
+            // **NEW:** Highlight the winning cells if the data is available
+            if (data.winningLine) {
+                highlightWinningCells(data.winningLine);
+            }
             break;
         case 'draw':
             statusDisplay.textContent = "It's a Draw!";
-            boardDisplay.classList.add('game-over'); // **NEW:** Add game-over state
+            statusDisplay.classList.add('win-message'); // **NEW:** Also style the draw text
+            boardDisplay.classList.add('game-over');
             resetButton.style.display = 'block';
             break;
         case 'chat':
@@ -61,7 +70,7 @@ function renderBoard(board) {
         const cellElement = document.createElement('div');
         cellElement.classList.add('cell');
         if (cell) {
-            cellElement.classList.add(cell); // **NEW:** Add 'X' or 'O' as a class
+            cellElement.classList.add(cell);
         }
         cellElement.textContent = cell;
         cellElement.dataset.index = index;
@@ -70,8 +79,17 @@ function renderBoard(board) {
     });
 }
 
+// **NEW:** This function highlights the winning cells
+function highlightWinningCells(winningLine) {
+    winningLine.forEach(index => {
+        const cell = boardDisplay.querySelector(`[data-index='${index}']`);
+        if (cell) {
+            cell.classList.add('winning-cell');
+        }
+    });
+}
+
 function handleCellClick(event) {
-    // **NEW:** Prevent clicks when the game is over
     if (boardDisplay.classList.contains('game-over')) {
         return;
     }
