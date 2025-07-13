@@ -21,6 +21,8 @@ ws.onmessage = (event) => {
             playerIdDisplay.textContent = `You are Player ${myPlayerId}`;
             break;
         case 'game-start':
+            boardDisplay.classList.remove('game-over'); // **NEW:** Remove game-over state
+            // Fall-through to update
         case 'update':
             statusDisplay.textContent = `Player ${data.turn}'s Turn`;
             renderBoard(data.board);
@@ -28,10 +30,12 @@ ws.onmessage = (event) => {
             break;
         case 'win':
             statusDisplay.textContent = `Player ${data.winner} Wins!`;
+            boardDisplay.classList.add('game-over'); // **NEW:** Add game-over state
             resetButton.style.display = 'block';
             break;
         case 'draw':
             statusDisplay.textContent = "It's a Draw!";
+            boardDisplay.classList.add('game-over'); // **NEW:** Add game-over state
             resetButton.style.display = 'block';
             break;
         case 'chat':
@@ -56,6 +60,9 @@ function renderBoard(board) {
     board.forEach((cell, index) => {
         const cellElement = document.createElement('div');
         cellElement.classList.add('cell');
+        if (cell) {
+            cellElement.classList.add(cell); // **NEW:** Add 'X' or 'O' as a class
+        }
         cellElement.textContent = cell;
         cellElement.dataset.index = index;
         cellElement.addEventListener('click', handleCellClick);
@@ -64,6 +71,10 @@ function renderBoard(board) {
 }
 
 function handleCellClick(event) {
+    // **NEW:** Prevent clicks when the game is over
+    if (boardDisplay.classList.contains('game-over')) {
+        return;
+    }
     const index = event.target.dataset.index;
     ws.send(JSON.stringify({ type: 'move', index: parseInt(index) }));
 }

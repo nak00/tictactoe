@@ -1,37 +1,149 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+
+:root {
+    --bg-color: #1a1a2e;
+    --primary-color: #16213e;
+    --secondary-color: #0f3460;
+    --accent-color: #e94560;
+    --font-color: #dcdcdc;
+    --x-color: #3498db;
+    --o-color: #e74c3c;
+}
+
 body {
-    font-family: Arial, sans-serif;
-    text-align: center;
-    background-color: #f0f0f0;
-}
-#game-board {
-    display: grid;
-    grid-template-columns: repeat(3, 100px);
-    grid-gap: 5px;
-    margin: 20px auto;
-    width: 310px;
-}
-.cell {
-    width: 100px;
-    height: 100px;
-    background-color: #fff;
-    border: 2px solid #333;
-    font-size: 50px;
-    cursor: pointer;
+    font-family: 'Poppins', sans-serif;
     display: flex;
     justify-content: center;
     align-items: center;
+    min-height: 100vh;
+    background-color: var(--bg-color);
+    color: var(--font-color);
+    margin: 0;
+    padding: 20px;
+    box-sizing: border-box;
 }
-#chat-container {
+
+.container {
+    text-align: center;
+    background-color: var(--primary-color);
+    padding: 2rem;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    width: 100%;
+    max-width: 420px;
+}
+
+h1 {
+    color: var(--accent-color);
+    margin-bottom: 1rem;
+}
+
+#game-info {
+    margin-bottom: 1.5rem;
+    font-size: 1.1rem;
+}
+
+#game-board {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
     margin: 20px auto;
-    width: 320px;
-    border: 1px solid #ccc;
-    padding: 10px;
+    width: 300px;
+    height: 300px;
+    transition: opacity 0.5s ease;
 }
+
+/* Style for when the game is over */
+#game-board.game-over {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.cell {
+    background-color: var(--secondary-color);
+    border-radius: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 4rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.cell:not(.X):not(.O):hover {
+    background-color: #2a4a87;
+}
+
+/* Styles for X and O */
+.cell.X {
+    color: var(--x-color);
+}
+
+.cell.O {
+    color: var(--o-color);
+}
+
+button {
+    background: linear-gradient(45deg, var(--accent-color), #f06a7f);
+    color: white;
+    border: none;
+    padding: 12px 25px;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-family: 'Poppins', sans-serif;
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    margin-top: 10px;
+}
+
+button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(233, 69, 96, 0.4);
+}
+
+#reset-button {
+    margin-top: 20px;
+}
+
+#chat-container {
+    margin-top: 2rem;
+    background-color: var(--secondary-color);
+    border-radius: 10px;
+    padding: 1rem;
+}
+
 #chat-box {
-    height: 150px;
+    height: 120px;
     overflow-y: scroll;
-    border: 1px solid #ddd;
-    padding: 5px;
+    background-color: var(--bg-color);
+    border-radius: 5px;
+    padding: 10px;
     text-align: left;
     margin-bottom: 10px;
+}
+
+#chat-box p {
+    margin: 0 0 8px 0;
+}
+
+#chat-input {
+    width: calc(100% - 90px);
+    padding: 10px;
+    border: 2px solid transparent;
+    border-radius: 5px;
+    background-color: var(--bg-color);
+    color: var(--font-color);
+    margin-right: 5px;
+}
+
+#chat-input:focus {
+    outline: none;
+    border-color: var(--accent-color);
+}
+
+#send-button {
+    width: 80px;
+    padding: 12px 0;
+    margin: 0;
 }
